@@ -48,7 +48,10 @@ export const linkShippingAddressToCart = async (shippingAddressId: string) => {
   // Verificar se já existe um endereço vinculado
   if (cart.shippingAddressId) {
     if (cart.shippingAddressId === shippingAddressId) {
-      throw ("Este endereço já está vinculado ao carrinho");
+      return { 
+        success: true, 
+        message: "Este endereço já está vinculado ao carrinho" 
+      };
     }
     
     // Atualizar o carrinho com o novo shippingAddressId

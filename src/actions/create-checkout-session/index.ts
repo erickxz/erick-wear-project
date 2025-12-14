@@ -60,7 +60,7 @@ export const createCheckoutSession = async (data: CreateCheckoutSessionSchema) =
   const checkoutSession = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success`,
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?orderId=${orderId}&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/`,
     metadata: {
       orderId,

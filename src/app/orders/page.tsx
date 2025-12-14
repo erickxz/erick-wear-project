@@ -39,7 +39,7 @@ const OrdersPage = async () => {
   let pendingCart = null;
   try {
     const cart = await getCart();
-    if (cart && cart.items.length > 0) {
+    if (cart && cart.items.length > 0 && cart.shippingAddressId) {
       pendingCart = cart;
     }
   } catch (error) {
