@@ -21,7 +21,7 @@ const ProductActions = ({ productVariantId }: ProductActionsProps) => {
 
     const handleIncrement = () => {
         setQuantity((prev) => prev + 1);
-    }
+    }   
 
     return ( <>
 <div className="space-y-4 px-5">

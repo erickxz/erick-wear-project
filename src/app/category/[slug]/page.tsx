@@ -25,9 +25,10 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
             variants: true,
         },
     });
+    const categories = await db.query.categoryTable.findMany();
     return ( 
        <>
-       <Header />
+       <Header categories={categories} />
        <div className="px-5 space-y-6">
        <h2 className="text-2xl font-bold">{category.name}</h2>
        <div className="grid grid-cols-2 gap-4">

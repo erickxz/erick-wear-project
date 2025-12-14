@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 import { db } from "@/db";
-import { orderTable } from "@/db/schema";
+import { cartItemTable, cartTable, orderTable } from "@/db/schema";
 
 export const POST = async (request: Request) => {
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
@@ -27,12 +27,24 @@ export const POST = async (request: Request) => {
     if (!orderId) {
       return NextResponse.error();
     }
-    await db
-      .update(orderTable)
-      .set({
-        status: "paid",
-      })
-      .where(eq(orderTable.id, orderId));
+    const order = await db.query.orderTable.findFirst({
+      where: eq(orderTable.id, orderId),
+    });
+    if (!order) {
+      return NextResponse.error();
+    }
+    await db.transaction(async (tx) => {
+      await tx
+        .update(orderTable)
+        .set({
+          status: "paid",
+        })
+        .where(eq(orderTable.id, orderId));
+      if (order.cartId) {
+        await tx.delete(cartItemTable).where(eq(cartItemTable.cartId, order.cartId));
+        await tx.delete(cartTable).where(eq(cartTable.id, order.cartId));
+      }
+    });
   }
   return NextResponse.json({ received: true });
 };

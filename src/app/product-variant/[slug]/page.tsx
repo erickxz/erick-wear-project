@@ -38,11 +38,11 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
       variants: true,
     },
   });
-
+  const categories = await db.query.categoryTable.findMany();
 
   return ( 
     <>
-    <Header />
+    <Header categories={categories} />
     <div className="flex flex-col space-y-4">
       <Image src={productVariant.imageUrl} alt={productVariant.name} width={0} height={0} sizes="100vw" className="h-auto w-full rounded-3xl px-2" />
 

@@ -1,43 +1,53 @@
-"use client";
+"use client"
 
-import { ShoppingBagIcon } from "lucide-react";
-import Link from "next/link";
+import { ShoppingBagIcon } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
 
-import { formatCentsToBRL } from "@/app/helpers/money";
-import { Button } from "@/components/ui/button";
-import { useCart } from "@/hooks/queries/use-cart";
+import { formatCentsToBRL } from "@/app/helpers/money"
+import { Button } from "@/components/ui/button"
+import { useCart } from "@/hooks/queries/use-cart"
 
-import { ScrollArea } from "../ui/scroll-area";
-import { Separator } from "../ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
-import CartItem from "./cart-item";
+import { ScrollArea } from "../ui/scroll-area"
+import { Separator } from "../ui/separator"
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
+import CartItem from "./cart-item"
 
 const EmptyState = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <ShoppingBagIcon className="w-10 h-10 text-muted-foreground" />
-      <p className="text-sm text-muted-foreground">Carrinho vazio</p>
+    <div className="flex flex-col items-center justify-center h-full gap-6 px-8 py-12">
+      <div className="rounded-full bg-muted p-6">
+        <ShoppingBagIcon className="w-12 h-12 text-muted-foreground" />
+      </div>
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h3 className="font-semibold text-lg">Seu carrinho está vazio</h3>
+        <p className="text-sm text-muted-foreground text-balance">
+          Adicione produtos ao carrinho para começar suas compras
+        </p>
+      </div>
+      <SheetClose asChild>
+        <Button asChild className="rounded-full mt-2">
+          <Link href="/">
+            Explorar produtos
+          </Link>
+        </Button>
+      </SheetClose>
     </div>
-  );
-};
+  )
+}
 
-export const Cart = () => { 
-  const { data: cart } = useCart();
+export const Cart = () => {
+  const { data: cart } = useCart()
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon">
           <ShoppingBagIcon />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="rounded-tl-3xl rounded-bl-3xl">
         <SheetHeader>
           <SheetTitle>Carrinho</SheetTitle>
         </SheetHeader>
@@ -56,9 +66,7 @@ export const Cart = () => {
                       productVariantId={item.productVariant.id}
                       productVariantName={item.productVariant.name}
                       productVariantImageUrl={item.productVariant.imageUrl}
-                      productVariantPriceInCents={
-                        item.productVariant.priceInCents
-                      }
+                      productVariantPriceInCents={item.productVariant.priceInCents}
                       quantity={item.quantity}
                     />
                   ))}
@@ -98,7 +106,7 @@ export const Cart = () => {
         )}
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}
 
 // SERVER ACTION

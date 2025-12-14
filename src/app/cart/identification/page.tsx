@@ -42,11 +42,12 @@ const IdentificationPage = async() => {
     const shippingAddress = await db.query.shippingAddressTable.findMany({
         where: eq(shippingAddressTable.userId, session.user.id),
     });
+    const categories = await db.query.categoryTable.findMany();
 
     const cartTotalPriceInCents = cart.items.reduce((acc, item) => acc + item.productVariant.priceInCents * item.quantity, 0);
   return (
    <>
-   <Header />
+   <Header categories={categories} />
    <div className="p-5 space-y-4">
    <Addresses shippingAddresses={shippingAddress} initialCart={cart as unknown as Awaited<ReturnType<typeof getCart>>} />
 

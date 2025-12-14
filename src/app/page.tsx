@@ -21,7 +21,7 @@ const Home = async () => {
   console.log(products);
   return (
     <>
-    <Header />
+    <Header categories={categories} />
     <div className="space-y-6">
       <div className="px-5">
       <Image src="/banner.svg" alt="Leve uma vida com estilo" height={0} width={0} sizes="100vw" className="h-auto w-full" />
