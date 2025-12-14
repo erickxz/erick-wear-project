@@ -2,11 +2,12 @@
 
 import { ShoppingBagIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import { formatCentsToBRL } from "@/app/helpers/money";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/queries/use-cart";
+import { cn } from "@/lib/utils";
 
 import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
@@ -44,15 +45,41 @@ const EmptyState = () => {
 export const Cart = () => {
   const { data: cart, isError } = useCart();
   const [isOpen, setIsOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Show empty state if user is not logged in (error) or cart is empty
   const showEmptyState = isError || !cart || cart.items.length === 0;
 
+  // Calculate total items in cart
+  const totalItems =
+    cart?.items.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
+
+  // Trigger animation when cart updates
+  React.useEffect(() => {
+    if (totalItems > 0) {
+      setIsAnimating(true);
+      const timer = setTimeout(() => setIsAnimating(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [totalItems]);
+
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <ShoppingBagIcon />
+        <Button variant="ghost" size="icon" className="relative">
+          <ShoppingBagIcon
+            className={isAnimating ? "animate-cart-bounce" : ""}
+          />
+          {totalItems > 0 && (
+            <span
+              className={cn(
+                "bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold",
+                isAnimating && "animate-scale-in",
+              )}
+            >
+              {totalItems}
+            </span>
+          )}
         </Button>
       </SheetTrigger>
       <SheetContent className="w-[320px] rounded-tl-3xl rounded-bl-3xl">
