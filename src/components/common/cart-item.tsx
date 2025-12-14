@@ -8,7 +8,7 @@ import { useAddProductToCart } from "@/hooks/mutations/use-increase-product-quan
 import { useRemoveProductFromCart } from "@/hooks/mutations/use-remove-product-from-cart";
 
 import { Button } from "../ui/button";
-  
+
 interface CartItemProps {
   id: string;
   productName: string;
@@ -29,7 +29,11 @@ const CartItem = ({
   quantity,
 }: CartItemProps) => {
   const decreaseCartProductMutation = useDecreaseProductQuantity(id);
-  const increaseCartProductMutation = useAddProductToCart(id, productVariantId, quantity);
+  const increaseCartProductMutation = useAddProductToCart(
+    id,
+    productVariantId,
+    1,
+  );
   const removeCartProductMutation = useRemoveProductFromCart(id);
 
   const handleDeleteClick = () => {
@@ -41,14 +45,14 @@ const CartItem = ({
         toast.error("Erro ao remover produto do carrinho");
       },
     });
-  }
+  };
   const handleDecreaseClick = () => {
     decreaseCartProductMutation.mutate(undefined, {
       onSuccess: () => {
         // toast.success("Produto diminuido do carrinho");
       },
     });
-  }
+  };
 
   const handleIncreaseClick = () => {
     increaseCartProductMutation.mutate(undefined, {
@@ -65,7 +69,7 @@ const CartItem = ({
           alt={productVariantName}
           width={78}
           height={78}
-          className="rounded-lg "
+          className="rounded-lg"
         />
         <div className="flex flex-col gap-1">
           <p className="text-sm font-semibold">{productName}</p>
@@ -73,11 +77,19 @@ const CartItem = ({
             {productVariantName}
           </p>
           <div className="flex w-[100px] items-center justify-between rounded-lg border p-1">
-            <Button className="h-4 w-4" variant="ghost" onClick={handleDecreaseClick}>
+            <Button
+              className="h-4 w-4"
+              variant="ghost"
+              onClick={handleDecreaseClick}
+            >
               <MinusIcon />
             </Button>
             <p className="text-xs font-medium">{quantity}</p>
-            <Button className="h-4 w-4" variant="ghost" onClick={handleIncreaseClick}>
+            <Button
+              className="h-4 w-4"
+              variant="ghost"
+              onClick={handleIncreaseClick}
+            >
               <PlusIcon />
             </Button>
           </div>
@@ -88,7 +100,7 @@ const CartItem = ({
           <TrashIcon />
         </Button>
         <p className="text-sm font-bold">
-          {formatCentsToBRL(productVariantPriceInCents)}    
+          {formatCentsToBRL(productVariantPriceInCents)}
         </p>
       </div>
     </div>
