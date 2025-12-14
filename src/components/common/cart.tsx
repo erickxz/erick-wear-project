@@ -42,10 +42,22 @@ const EmptyState = () => {
   );
 };
 
-export const Cart = () => {
+interface CartProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export const Cart = ({
+  isOpen: externalIsOpen,
+  onOpenChange: externalOnOpenChange,
+}: CartProps = {}) => {
   const { data: cart, isError } = useCart();
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  // Use external state if provided, otherwise use internal state
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = externalOnOpenChange || setInternalIsOpen;
 
   // Show empty state if user is not logged in (error) or cart is empty
   const showEmptyState = isError || !cart || cart.items.length === 0;
@@ -94,7 +106,7 @@ export const Cart = () => {
       </SheetTrigger>
       <SheetContent className="w-[320px] rounded-tl-3xl rounded-bl-3xl">
         <SheetHeader className="text-lg">
-          <SheetTitle>Carrinho</SheetTitle>
+          <SheetTitle>Sacola</SheetTitle>
         </SheetHeader>
         {showEmptyState ? (
           <EmptyState />
