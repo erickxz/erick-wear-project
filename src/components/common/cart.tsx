@@ -54,13 +54,23 @@ export const Cart = () => {
   const totalItems =
     cart?.items.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
-  // Trigger animation when cart updates
+  // Trigger animation only when items INCREASE (not just change)
   React.useEffect(() => {
-    if (totalItems > 0) {
+    // Get previous count from sessionStorage
+    const prevCount = parseInt(
+      sessionStorage.getItem("cartTotalItems") || "0",
+      10,
+    );
+
+    // Only animate if count increased
+    if (totalItems > prevCount && totalItems > 0) {
       setIsAnimating(true);
       const timer = setTimeout(() => setIsAnimating(false), 600);
       return () => clearTimeout(timer);
     }
+
+    // Always update sessionStorage with current count
+    sessionStorage.setItem("cartTotalItems", totalItems.toString());
   }, [totalItems]);
 
   return (

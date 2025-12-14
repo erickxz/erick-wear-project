@@ -18,6 +18,7 @@ const VariantSelector = ({
         <Link
           href={`/product-variant/${variant.slug}`}
           key={variant.id}
+          scroll={false}
           className={
             selectedVariantSlug === variant.slug
               ? "border-primary rounded-xl border-2"

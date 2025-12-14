@@ -12,11 +12,13 @@ import { Button } from "@/components/ui/button";
 interface AddToCartButtonProps {
   productVariantId: string;
   quantity: number;
+  onSuccess?: () => void;
 }
 
 const AddToCartButton = ({
   productVariantId,
   quantity,
+  onSuccess,
 }: AddToCartButtonProps) => {
   const queryClient = useQueryClient();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -31,8 +33,8 @@ const AddToCartButton = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
       setShowSuccess(true);
-      //   toast.success("Produto adicionado ao carrinho!");
       setTimeout(() => setShowSuccess(false), 2000);
+      onSuccess?.();
     },
     onError: () => {
       toast.error("Erro ao adicionar produto ao carrinho");

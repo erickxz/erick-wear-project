@@ -22,6 +22,10 @@ const ProductActions = ({ productVariantId }: ProductActionsProps) => {
     setQuantity((prev) => prev + 1);
   };
 
+  const handleAddToCartSuccess = () => {
+    setQuantity(1);
+  };
+
   return (
     <>
       <div className="space-y-4 px-5">
@@ -51,6 +55,7 @@ const ProductActions = ({ productVariantId }: ProductActionsProps) => {
         <AddToCartButton
           productVariantId={productVariantId}
           quantity={quantity}
+          onSuccess={handleAddToCartSuccess}
         />
         <Button className="rounded-full" size="lg">
           Comprar agora
