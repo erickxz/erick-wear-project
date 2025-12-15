@@ -21,7 +21,7 @@ export const searchProducts = async (query: string) => {
       },
       limit: 5,
     });
-  } catch (e) {
+  } catch {
     // Fallback para busca normal caso a extensão não exista
     return await db.query.productTable.findMany({
       where: ilike(productTable.name, `%${query}%`),
