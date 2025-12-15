@@ -6,6 +6,7 @@ import {
   LogOutIcon,
   MenuIcon,
   PackageIcon,
+  Search,
   ShoppingBagIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -27,6 +28,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Cart } from "./cart";
+import { SearchDialog } from "./search-dialog";
 
 interface HeaderProps {
   categories?: Array<{
@@ -48,6 +50,7 @@ export const Header = ({ categories = [] }: HeaderProps) => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleCartClick = () => {
     setIsSidebarOpen(false);
@@ -63,6 +66,14 @@ export const Header = ({ categories = [] }: HeaderProps) => {
       </Link>
 
       <div className="flex h-6 items-center gap-3">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsSearchOpen(true)}
+        >
+          <Search className="h-5 w-5" />
+        </Button>
+
         <div className="relative flex items-center">
           <Cart isOpen={isCartOpen} onOpenChange={setIsCartOpen} />
         </div>
@@ -203,6 +214,8 @@ export const Header = ({ categories = [] }: HeaderProps) => {
           </SheetContent>
         </Sheet>
       </div>
+
+      <SearchDialog isOpen={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </header>
   );
 };
